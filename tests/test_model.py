@@ -1,6 +1,11 @@
-﻿"""Pytest coverage for preprocessing, model loading, and prediction."""
+﻿import sys
+import os
 
-from __future__ import annotations
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from src.predict import load_model, predict_price
+
+"""Pytest coverage for preprocessing, model loading, and prediction."""
 
 import pandas as pd
 
