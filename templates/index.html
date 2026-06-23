@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Price Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="page-shell">
+        <section class="hero" aria-label="Car price prediction form">
+            <div class="hero-copy">
+                <p class="eyebrow">Machine Learning Price Estimator</p>
+                <h1>Car Price Prediction</h1>
+                <p class="subtitle">Estimate a used car's resale value from market-ready vehicle attributes.</p>
+            </div>
+
+            <form class="prediction-panel" action="{{ url_for('predict') }}" method="post" novalidate>
+                <div class="form-grid">
+                    <label>
+                        <span>Car Model</span>
+                        <input
+                            type="text"
+                            name="car_name"
+                            list="car-models"
+                            placeholder="ritz"
+                            value="{{ form_data.car_name }}"
+                            required
+                        >
+                        <datalist id="car-models">
+                            {% for value in ["ritz", "sx4", "ciaz", "wagon r", "swift", "vitara brezza", "city", "brio", "fortuner", "innova"] %}
+                            <option value="{{ value }}"></option>
+                            {% endfor %}
+                        </datalist>
+                    </label>
+
+                    <label>
+                        <span>Present Price (Lakhs)</span>
+                        <input type="number" name="present_price" min="0.01" step="0.01" placeholder="5.80" value="{{ form_data.present_price }}" required>
+                    </label>
+
+                    <label>
+                        <span>Kms Driven</span>
+                        <input type="number" name="kms_driven" min="0" step="1" placeholder="45000" value="{{ form_data.kms_driven }}" required>
+                    </label>
+
+                    <label>
+                        <span>Fuel Type</span>
+                        <select name="fuel_type" required>
+                            {% for value in ["Petrol", "Diesel", "CNG"] %}
+                            <option value="{{ value }}" {% if form_data.fuel_type == value %}selected{% endif %}>{{ value }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+
+                    <label>
+                        <span>Seller Type</span>
+                        <select name="seller_type" required>
+                            {% for value in ["Dealer", "Individual"] %}
+                            <option value="{{ value }}" {% if form_data.seller_type == value %}selected{% endif %}>{{ value }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+
+                    <label>
+                        <span>Transmission</span>
+                        <select name="transmission" required>
+                            {% for value in ["Manual", "Automatic"] %}
+                            <option value="{{ value }}" {% if form_data.transmission == value %}selected{% endif %}>{{ value }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+
+                    <label>
+                        <span>Owner Count</span>
+                        <input type="number" name="owner" min="0" max="5" step="1" value="{{ form_data.owner }}" required>
+                    </label>
+
+                    <label>
+                        <span>Car Age</span>
+                        <input type="number" name="car_age" min="0" max="50" step="1" placeholder="6" value="{{ form_data.car_age }}" required>
+                    </label>
+                </div>
+
+                <button type="submit">Predict Price</button>
+
+                {% if prediction %}
+                <div class="result success" role="status">
+                    <span>Predicted Selling Price</span>
+                    <strong>{{ prediction }}</strong>
+                </div>
+                {% endif %}
+
+                {% if error %}
+                <div class="result error" role="alert">
+                    <span>Prediction Error</span>
+                    <strong>{{ error }}</strong>
+                </div>
+                {% endif %}
+            </form>
+        </section>
+    </main>
+</body>
+</html>
